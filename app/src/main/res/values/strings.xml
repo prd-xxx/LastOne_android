@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_title">ラストワン</string>
+    <string name="introduction">さいごの　いっぽんを　けしたほうが　まけ。</string>
+    <string name="two_players_battle">ふたりで　たいせん</string>
+    <string name="version">version: </string>
+    <string name="red">あか</string>
+    <string name="blue">あお</string>
+    <string name="s_turn">のばん</string>
+    <string name="remain">のこり</string>
+    <string name="toast_cant_draw">そのけしかたは　できません！</string>
+    <string name="wins">のかち！</string>
+    <string name="retry">もういちど</string>
+    <string name="quit">やめる</string>
+</resources>
