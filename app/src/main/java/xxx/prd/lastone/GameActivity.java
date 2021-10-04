@@ -1,5 +1,7 @@
 package xxx.prd.lastone;
 
+import static xxx.prd.lastone.model.Game.ROW_NUM;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -7,36 +9,75 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
 import android.view.Gravity;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import xxx.prd.lastone.model.Game;
+import xxx.prd.lastone.model.IComPlayer;
+import xxx.prd.lastone.model.Operation;
+import xxx.prd.lastone.model.RandomPlayer;
+
 public class GameActivity extends Activity {
 
-    private final int ROW_NUM = 6;
+    static final String INTENT_EXTRA_MODE = "MODE";
+    static final int MODE_ONE_PLAYER = 1;
+    static final int MODE_TWO_PLAYERS = 2;
+    private int mMode;
+    private PaintView mPaintView;
     private List<Pin>[] mPins;
-    private boolean mIsRedTurn = true;
-    private int mRemainPins = 0;
+    private Game mGame;
+    private IComPlayer mComPlayer = null;
+    private Handler mHandler;
+    private ProgressBar mProgressBar;
+    private TextView mRemainPinsTextView;
+    private boolean mAreYouFirst;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
-        PaintView paintView = (PaintView) findViewById(R.id.paint_view);
-        paintView.setActivity(this);
+        mPaintView = (PaintView) findViewById(R.id.paint_view);
+        mPaintView.setActivity(this);
 
+        mMode = getIntent().getIntExtra(INTENT_EXTRA_MODE, MODE_TWO_PLAYERS);
+        if(mMode == MODE_ONE_PLAYER) {
+            mComPlayer = new RandomPlayer();
+        }
+        mHandler = new Handler();
+        mProgressBar = (ProgressBar) findViewById(R.id.progressbar);
+        mRemainPinsTextView = (TextView) findViewById(R.id.pin_remain);
+
+        mGame = new Game(new int[]{1,2,3,4,5,6});
         mPins = new List[ROW_NUM];
         for (int i=0; i<ROW_NUM; i++) {
             mPins[i] = new ArrayList<>();
-            addPins(i, i+1);
+            addPins(i, mGame.getColNum(i));
         }
         TextView remainPins = (TextView) findViewById(R.id.pin_remain);
-        remainPins.setText(mRemainPins + "");
+        remainPins.setText(mGame.getRemainPinNum() + "");
+
+        if (mMode == MODE_ONE_PLAYER) {
+            showTurnSelectDialog();
+        }
+        Log.d("mode", mMode + "");
+        Log.d("game", mGame.toString());
+    }
+    @Override
+    protected void onStart() {
+        super.onStart();
+
     }
 
     private void addPins(int rowIndex, int pinNum) {
@@ -45,7 +86,6 @@ public class GameActivity extends Activity {
             Pin pin = new Pin(this);
             pinsLayout.addView(pin);
             mPins[rowIndex].add(pin);
-            mRemainPins++;
         }
         LinearLayout parent = (LinearLayout) findViewById(R.id.game_linearlayout);
         parent.addView(pinsLayout);
@@ -71,37 +111,69 @@ public class GameActivity extends Activity {
             int j = 0;
             for (Pin pin: mPins[i]) {
                 if (line.acrossPin(pin)) {
-                    if(mIsRedTurn) {
+                    mGame.erasePinAt(i, j);
+                    if(mGame.isRedTurn()) {
                         pin.setPinState(PinState.GOT_BY_RED);
                     } else {
                         pin.setPinState(PinState.GOT_BY_BLUE);
                     }
-                    mRemainPins--;
                 } else if (pin.isAlive()){
                     pin.setPinState(PinState.ALIVE);
                 }
                 j++;
             }
         }
-        TextView remainPins = (TextView) findViewById(R.id.pin_remain);
-        remainPins.setText(mRemainPins + "");
-        if (mRemainPins == 0) {
+        mRemainPinsTextView.setText(mGame.getRemainPinNum() + "");
+
+        mGame.flipTurnManually();
+        if (mGame.getRemainPinNum() == 0) {
             showGameEndDialog();
         } else {
             flipTurn();
+            if (mMode == MODE_ONE_PLAYER) {
+                operateComTurn();
+            }
         }
+        Log.d("game", mGame.toString());
     }
     private void flipTurn() {
-        mIsRedTurn = !mIsRedTurn;
         TextView whoseTurn = (TextView) findViewById(R.id.whose_turn);
-        if (mIsRedTurn) {
-            whoseTurn.setText(R.string.red);
+        if (mGame.isRedTurn()) {
+            int playerStrId = mMode == MODE_ONE_PLAYER && mAreYouFirst ? R.string.you : R.string.red;
+            whoseTurn.setText(playerStrId);
             whoseTurn.setTextColor(Color.RED);
         } else {
-            whoseTurn.setText(R.string.blue);
+            int playerStrId = mMode == MODE_ONE_PLAYER && !mAreYouFirst ? R.string.you : R.string.blue;
+            whoseTurn.setText(playerStrId);
             whoseTurn.setTextColor(Color.BLUE);
         }
     }
+    private void drawComOperation(Operation ope) {
+        for(int col=ope.getFromCol(); col<=ope.getToCol(); col++) {
+            mPins[ope.getRow()].get(col).setPinState(mGame.isRedTurn() ? PinState.GOT_BY_RED : PinState.GOT_BY_BLUE);
+        }
+        int y = mPins[ope.getRow()].get(0).getCenterY();
+        int l = mPins[ope.getRow()].get(ope.getFromCol()).getLeftBound();
+        int r = mPins[ope.getRow()].get(ope.getToCol()).getRightBound();
+        mPaintView.drawByComOperation(y, l, r);
+    }
+    private void operateComTurn() {
+        mProgressBar.setVisibility(View.VISIBLE);
+        mHandler.post(() -> {
+            Operation comOpe = mComPlayer.chooseOperation(mGame);
+            drawComOperation(comOpe);
+            mGame.doOperation(comOpe);
+            mRemainPinsTextView.setText(mGame.getRemainPinNum() + "");
+            if (mGame.getRemainPinNum() == 0) {
+                showGameEndDialog();
+            } else {
+                flipTurn();
+            }
+            mProgressBar.setVisibility(View.GONE);
+            mPaintView.invalidate();
+        });
+    }
+
     public boolean isValidLine(Line line) {
         int selectedRow = -1;
         for (int i=0; i<ROW_NUM; i++) {
@@ -132,28 +204,61 @@ public class GameActivity extends Activity {
             }
         }
     }
-    private void showGameEndDialog() {
-        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                switch (which){
-                    case DialogInterface.BUTTON_POSITIVE:
-                        finish();
-                        Intent intent = new Intent(GameActivity.this, GameActivity.class);
-                        startActivity(intent);
-                        break;
-                    case DialogInterface.BUTTON_NEGATIVE:
-                        finish();
-                        break;
-                }
+    public boolean isRedTurn() {
+        return mGame.isRedTurn();
+    }
+
+    private void showTurnSelectDialog() {
+        DialogInterface.OnClickListener dialogClickListener = (dialog, which) -> {
+            switch (which){
+                case DialogInterface.BUTTON_POSITIVE:
+                    mAreYouFirst = false;
+                    operateComTurn();
+                    break;
+                case DialogInterface.BUTTON_NEGATIVE:
+                    mAreYouFirst = true;
+                    TextView whoseTurn = (TextView) findViewById(R.id.whose_turn);
+                    whoseTurn.setText(R.string.you);
+                    whoseTurn.invalidate();
+                    break;
             }
         };
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        String winColor = getString(mIsRedTurn ? R.string.blue : R.string.red);
-        builder.setMessage(winColor + getString(R.string.wins))
-                .setPositiveButton(R.string.retry, dialogClickListener)
-                .setNegativeButton(R.string.quit, dialogClickListener)
+        builder.setMessage(getString(R.string.turn_select))
+                .setPositiveButton(R.string.second, dialogClickListener)
+                .setNegativeButton(R.string.first, dialogClickListener)
                 .show();
+    }
+
+    private void showGameEndDialog() {
+        DialogInterface.OnClickListener dialogClickListener = (dialog, which) -> {
+            switch (which){
+                case DialogInterface.BUTTON_POSITIVE:
+                    Intent intent = new Intent(GameActivity.this, GameActivity.class);
+                    intent.putExtra(INTENT_EXTRA_MODE, mMode);
+                    startActivity(intent);
+                    break;
+                case DialogInterface.BUTTON_NEGATIVE:
+                    finish();
+                    break;
+            }
+        };
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        if(mMode == MODE_ONE_PLAYER) {
+            int msgId = mGame.isRedTurn() ^ mAreYouFirst ? R.string.you_lose : R.string.you_win;
+            builder.setMessage(getString(msgId))
+                    .setPositiveButton(R.string.retry, dialogClickListener)
+                    .setNegativeButton(R.string.quit, dialogClickListener)
+                    .show();
+
+        } else {
+            String winColor = getString(mGame.isRedTurn() ? R.string.red : R.string.blue);
+            builder.setMessage(winColor + getString(R.string.wins))
+                    .setPositiveButton(R.string.retry, dialogClickListener)
+                    .setNegativeButton(R.string.quit, dialogClickListener)
+                    .show();
+
+        }
     }
 
     private class PinsRowLayout extends LinearLayout {

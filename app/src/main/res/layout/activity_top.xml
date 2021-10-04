@@ -35,15 +35,25 @@
         app:layout_constraintTop_toBottomOf="@id/title_image" />
 
     <Button
-        android:id="@+id/two_players_button"
+        android:id="@+id/one_player_button"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:text="@string/two_players_battle"
+        android:text="@string/one_player_battle"
         android:layout_marginTop="64dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintTop_toBottomOf="@id/introduction"/>
+    <Button
+        android:id="@+id/two_players_button"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:text="@string/two_players_battle"
+        android:layout_marginTop="20dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintTop_toBottomOf="@id/one_player_button"/>
 
     <TextView
         android:id="@+id/version"

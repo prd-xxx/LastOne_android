@@ -34,6 +34,18 @@ public class Pin extends androidx.appcompat.widget.AppCompatImageView {
         getLocationIfNotYet();
         return mLocation[0] + getWidth() / 2;
     }
+    public int getCenterY() {
+        getLocationIfNotYet();
+        return mLocation[1] + getHeight() / 2;
+    }
+    public int getLeftBound() {
+        getLocationIfNotYet();
+        return mLocation[0];
+    }
+    public int getRightBound() {
+        getLocationIfNotYet();
+        return mLocation[0] + getWidth();
+    }
     public int getTopBound() {
         getLocationIfNotYet();
         return mLocation[1];
