@@ -19,7 +19,6 @@ public class PaintView extends View {
     private List<Line> mRedDefiniteLines;
     private List<Line> mBlueDefiniteLines;
     private GameActivity mActivity;
-    private boolean mIsRedTurn;
 
     public PaintView(Context context) {
         super(context);
@@ -43,11 +42,23 @@ public class PaintView extends View {
         mCurrentLine = new Line();
         mRedDefiniteLines = new ArrayList<>();
         mBlueDefiniteLines = new ArrayList<>();
-        mIsRedTurn = true;
     }
 
     public void setActivity(GameActivity activity) {
         mActivity = activity;
+    }
+
+    public void drawByComOperation(int y, int l, int r) {
+        y -= getOffsetY();
+        mCurrentLine.setStart(l + 8, y);
+        mCurrentLine.setEnd(r - 8, y);
+        if(mActivity.isRedTurn()) {
+            mRedDefiniteLines.add(mCurrentLine.clone());
+        } else {
+            mBlueDefiniteLines.add(mCurrentLine.clone());
+        }
+        mCurrentLine.clear();
+        invalidate();
     }
 
     @Override
@@ -63,7 +74,7 @@ public class PaintView extends View {
             drawLine(canvas, blueLine);
         }
         if (mCurrentLine.isDefinite()) {
-            if (mIsRedTurn) mPaint.setColor(Color.RED);
+            if (mActivity.isRedTurn()) mPaint.setColor(Color.RED);
             drawLine(canvas, mCurrentLine);
         }
     }
@@ -110,12 +121,11 @@ public class PaintView extends View {
         mCurrentLine.setEnd(x, y);
         if (mActivity.isValidLine(mCurrentLine)) {
             mActivity.onLineEnded(mCurrentLine);
-            if(mIsRedTurn) {
-                mRedDefiniteLines.add(mCurrentLine.clone());
-            } else {
+            if(mActivity.isRedTurn()) {
                 mBlueDefiniteLines.add(mCurrentLine.clone());
+            } else {
+                mRedDefiniteLines.add(mCurrentLine.clone());
             }
-            mIsRedTurn = !mIsRedTurn;
         } else {
             mActivity.clearSelecting();
         }
