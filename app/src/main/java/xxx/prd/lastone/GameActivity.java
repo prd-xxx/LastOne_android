@@ -19,8 +19,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -74,11 +72,6 @@ public class GameActivity extends Activity {
         Log.d("mode", mMode + "");
         Log.d("game", mGame.toString());
     }
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-    }
 
     private void addPins(int rowIndex, int pinNum) {
         PinsRowLayout pinsLayout = new PinsRowLayout(this, rowIndex);
@@ -93,7 +86,6 @@ public class GameActivity extends Activity {
 
     public void onLineDrugging(Line line) {
         for (int i=0; i<ROW_NUM; i++) {
-            int j = 0;
             for (Pin pin: mPins[i]) {
                 if (pin.isAlive()) {
                     if (line.acrossPin(pin)) {
@@ -102,7 +94,6 @@ public class GameActivity extends Activity {
                         pin.setPinState(PinState.ALIVE);
                     }
                 }
-                j++;
             }
         }
     }
@@ -177,7 +168,6 @@ public class GameActivity extends Activity {
     public boolean isValidLine(Line line) {
         int selectedRow = -1;
         for (int i=0; i<ROW_NUM; i++) {
-            int j = 0;
             for (Pin pin: mPins[i]) {
                 if (line.acrossPin(pin)) {
                     if(!pin.isAlive()) {
@@ -191,14 +181,12 @@ public class GameActivity extends Activity {
                         return false;
                     }
                 }
-                j++;
             }
         }
         return selectedRow != -1;
     }
     public void clearSelecting() {
         for (int i=0; i<ROW_NUM; i++) {
-            int j = 0;
             for (Pin pin: mPins[i]) {
                 if (pin.isSelecting()) pin.setPinState(PinState.ALIVE);
             }
