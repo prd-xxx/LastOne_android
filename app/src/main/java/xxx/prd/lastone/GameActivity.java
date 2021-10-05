@@ -237,6 +237,8 @@ public class GameActivity extends Activity {
         };
         //バックキー等でダイアログが閉じられた場合は先攻として扱う
         DialogInterface.OnDismissListener dismissListener = (dialog) -> {
+            if(opponentColor.getCurrentTextColor() == Color.RED) return;
+            if(opponentColor.getCurrentTextColor() == Color.BLUE) return;
             mAreYouFirst = true;
             opponentColor.setTextColor(Color.BLUE);
             TextView whoseTurn = (TextView) findViewById(R.id.whose_turn);
