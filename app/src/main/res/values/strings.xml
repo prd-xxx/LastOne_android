@@ -12,10 +12,16 @@
     <string name="first">せんこう</string>
     <string name="second">こうこう</string>
     <string name="remain">のこり</string>
+    <string name="opponent_color_sign">●</string>
+    <string name="opppnent">あいて：</string>
     <string name="toast_cant_draw">そのけしかたは　できません！</string>
     <string name="wins">のかち！</string>
     <string name="you_win">あなたのかち！</string>
     <string name="you_lose">あなたのまけ…</string>
     <string name="retry">もういちど</string>
     <string name="quit">やめる</string>
+    <string name="settings">せってい</string>
+    <string name="com_level">あいての　つよさ</string>
+    <string name="com_level_weak">よわい</string>
+    <string name="com_level_normal">ふつう</string>
 </resources>

@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.TextView;
 
 public class TopActivity extends Activity {
@@ -27,6 +26,10 @@ public class TopActivity extends Activity {
         findViewById(R.id.two_players_button).setOnClickListener(view -> {
             Intent intent = new Intent(TopActivity.this, GameActivity.class);
             intent.putExtra(INTENT_EXTRA_MODE, MODE_TWO_PLAYERS);
+            startActivity(intent);
+        });
+        findViewById(R.id.settings_button).setOnClickListener(view -> {
+            Intent intent = new Intent(TopActivity.this, SettingsActivity.class);
             startActivity(intent);
         });
 

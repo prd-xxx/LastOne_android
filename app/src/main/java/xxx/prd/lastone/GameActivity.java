@@ -1,5 +1,6 @@
 package xxx.prd.lastone;
 
+import static xxx.prd.lastone.model.ComPlayer.PREF_KEY;
 import static xxx.prd.lastone.model.Game.ROW_NUM;
 
 import android.app.Activity;
@@ -7,6 +8,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -19,15 +21,19 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.w3c.dom.Text;
+import androidx.preference.PreferenceManager;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import xxx.prd.lastone.model.ComPlayer;
 import xxx.prd.lastone.model.Game;
 import xxx.prd.lastone.model.IComPlayer;
 import xxx.prd.lastone.model.Operation;
-import xxx.prd.lastone.model.RandomPlayer;
+import xxx.prd.lastone.view.Line;
+import xxx.prd.lastone.view.PaintView;
+import xxx.prd.lastone.view.Pin;
+import xxx.prd.lastone.view.PinState;
 
 public class GameActivity extends Activity {
 
@@ -53,7 +59,20 @@ public class GameActivity extends Activity {
 
         mMode = getIntent().getIntExtra(INTENT_EXTRA_MODE, MODE_TWO_PLAYERS);
         if(mMode == MODE_ONE_PLAYER) {
-            mComPlayer = new RandomPlayer();
+            SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
+            String level = pref.getString(PREF_KEY, ComPlayer.defaultComPlayer().getPrefValue());
+            ComPlayer comPlayer = ComPlayer.findByPrefValue(level);
+            try {
+                mComPlayer = comPlayer.getComPlayerClass().newInstance();
+            } catch (IllegalAccessException | InstantiationException e) {
+                e.printStackTrace();
+            }
+            TextView comLevel = (TextView) findViewById(R.id.opponent_level);
+            comLevel.setText(getString(comPlayer.getNameId()));
+            Log.d("com player", comPlayer.toString());
+        } else {
+            findViewById(R.id.opponent_color).setVisibility(View.INVISIBLE);
+            findViewById(R.id.opponent).setVisibility(View.INVISIBLE);
         }
         mHandler = new Handler();
         mProgressBar = (ProgressBar) findViewById(R.id.progressbar);
@@ -74,11 +93,6 @@ public class GameActivity extends Activity {
         Log.d("mode", mMode + "");
         Log.d("game", mGame.toString());
     }
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-    }
 
     private void addPins(int rowIndex, int pinNum) {
         PinsRowLayout pinsLayout = new PinsRowLayout(this, rowIndex);
@@ -93,7 +107,6 @@ public class GameActivity extends Activity {
 
     public void onLineDrugging(Line line) {
         for (int i=0; i<ROW_NUM; i++) {
-            int j = 0;
             for (Pin pin: mPins[i]) {
                 if (pin.isAlive()) {
                     if (line.acrossPin(pin)) {
@@ -102,7 +115,6 @@ public class GameActivity extends Activity {
                         pin.setPinState(PinState.ALIVE);
                     }
                 }
-                j++;
             }
         }
     }
@@ -177,7 +189,6 @@ public class GameActivity extends Activity {
     public boolean isValidLine(Line line) {
         int selectedRow = -1;
         for (int i=0; i<ROW_NUM; i++) {
-            int j = 0;
             for (Pin pin: mPins[i]) {
                 if (line.acrossPin(pin)) {
                     if(!pin.isAlive()) {
@@ -191,14 +202,12 @@ public class GameActivity extends Activity {
                         return false;
                     }
                 }
-                j++;
             }
         }
         return selectedRow != -1;
     }
     public void clearSelecting() {
         for (int i=0; i<ROW_NUM; i++) {
-            int j = 0;
             for (Pin pin: mPins[i]) {
                 if (pin.isSelecting()) pin.setPinState(PinState.ALIVE);
             }
@@ -209,24 +218,38 @@ public class GameActivity extends Activity {
     }
 
     private void showTurnSelectDialog() {
+        TextView opponentColor = (TextView) findViewById(R.id.opponent_color);
         DialogInterface.OnClickListener dialogClickListener = (dialog, which) -> {
             switch (which){
                 case DialogInterface.BUTTON_POSITIVE:
                     mAreYouFirst = false;
+                    opponentColor.setTextColor(Color.RED);
                     operateComTurn();
                     break;
                 case DialogInterface.BUTTON_NEGATIVE:
                     mAreYouFirst = true;
+                    opponentColor.setTextColor(Color.BLUE);
                     TextView whoseTurn = (TextView) findViewById(R.id.whose_turn);
                     whoseTurn.setText(R.string.you);
                     whoseTurn.invalidate();
                     break;
             }
         };
+        //バックキー等でダイアログが閉じられた場合は先攻として扱う
+        DialogInterface.OnDismissListener dismissListener = (dialog) -> {
+            if(opponentColor.getCurrentTextColor() == Color.RED) return;
+            if(opponentColor.getCurrentTextColor() == Color.BLUE) return;
+            mAreYouFirst = true;
+            opponentColor.setTextColor(Color.BLUE);
+            TextView whoseTurn = (TextView) findViewById(R.id.whose_turn);
+            whoseTurn.setText(R.string.you);
+            whoseTurn.invalidate();
+        };
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(getString(R.string.turn_select))
                 .setPositiveButton(R.string.second, dialogClickListener)
                 .setNegativeButton(R.string.first, dialogClickListener)
+                .setOnDismissListener(dismissListener)
                 .show();
     }
 
@@ -243,12 +266,16 @@ public class GameActivity extends Activity {
                     break;
             }
         };
+        DialogInterface.OnDismissListener dismissListener = (dialog) -> {
+            finish();
+        };
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         if(mMode == MODE_ONE_PLAYER) {
             int msgId = mGame.isRedTurn() ^ mAreYouFirst ? R.string.you_lose : R.string.you_win;
             builder.setMessage(getString(msgId))
                     .setPositiveButton(R.string.retry, dialogClickListener)
                     .setNegativeButton(R.string.quit, dialogClickListener)
+                    .setOnDismissListener(dismissListener)
                     .show();
 
         } else {
@@ -256,6 +283,7 @@ public class GameActivity extends Activity {
             builder.setMessage(winColor + getString(R.string.wins))
                     .setPositiveButton(R.string.retry, dialogClickListener)
                     .setNegativeButton(R.string.quit, dialogClickListener)
+                    .setOnDismissListener(dismissListener)
                     .show();
 
         }

@@ -1,0 +1,11 @@
+<resources>
+    <string-array name="com_level_entries">
+        <item>@string/com_level_weak</item>
+        <item>@string/com_level_normal</item>
+    </string-array>
+
+    <string-array name="com_level_values">
+        <item>weak</item>
+        <item>normal</item>
+    </string-array>
+</resources>
