@@ -1,5 +1,6 @@
 package xxx.prd.lastone;
 
+import static xxx.prd.lastone.model.ComPlayer.PREF_KEY;
 import static xxx.prd.lastone.model.Game.ROW_NUM;
 
 import android.app.Activity;
@@ -7,6 +8,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -19,13 +21,15 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.preference.PreferenceManager;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import xxx.prd.lastone.model.ComPlayer;
 import xxx.prd.lastone.model.Game;
 import xxx.prd.lastone.model.IComPlayer;
 import xxx.prd.lastone.model.Operation;
-import xxx.prd.lastone.model.ParityPoorPlayer;
 import xxx.prd.lastone.view.Line;
 import xxx.prd.lastone.view.PaintView;
 import xxx.prd.lastone.view.Pin;
@@ -55,7 +59,20 @@ public class GameActivity extends Activity {
 
         mMode = getIntent().getIntExtra(INTENT_EXTRA_MODE, MODE_TWO_PLAYERS);
         if(mMode == MODE_ONE_PLAYER) {
-            mComPlayer = new ParityPoorPlayer();//RandomPlayer();
+            SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
+            String level = pref.getString(PREF_KEY, ComPlayer.defaultComPlayer().getPrefValue());
+            ComPlayer comPlayer = ComPlayer.findByPrefValue(level);
+            try {
+                mComPlayer = comPlayer.getComPlayerClass().newInstance();
+            } catch (IllegalAccessException | InstantiationException e) {
+                e.printStackTrace();
+            }
+            TextView comLevel = (TextView) findViewById(R.id.opponent_level);
+            comLevel.setText(getString(comPlayer.getNameId()));
+            Log.d("com player", comPlayer.toString());
+        } else {
+            findViewById(R.id.opponent_color).setVisibility(View.INVISIBLE);
+            findViewById(R.id.opponent).setVisibility(View.INVISIBLE);
         }
         mHandler = new Handler();
         mProgressBar = (ProgressBar) findViewById(R.id.progressbar);
@@ -202,13 +219,16 @@ public class GameActivity extends Activity {
 
     private void showTurnSelectDialog() {
         DialogInterface.OnClickListener dialogClickListener = (dialog, which) -> {
+            TextView opponentColor = (TextView) findViewById(R.id.opponent_color);
             switch (which){
                 case DialogInterface.BUTTON_POSITIVE:
                     mAreYouFirst = false;
+                    opponentColor.setTextColor(Color.RED);
                     operateComTurn();
                     break;
                 case DialogInterface.BUTTON_NEGATIVE:
                     mAreYouFirst = true;
+                    opponentColor.setTextColor(Color.BLUE);
                     TextView whoseTurn = (TextView) findViewById(R.id.whose_turn);
                     whoseTurn.setText(R.string.you);
                     whoseTurn.invalidate();
