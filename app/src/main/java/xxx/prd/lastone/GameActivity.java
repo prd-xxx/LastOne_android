@@ -25,6 +25,8 @@ import java.util.List;
 import xxx.prd.lastone.model.Game;
 import xxx.prd.lastone.model.IComPlayer;
 import xxx.prd.lastone.model.Operation;
+import xxx.prd.lastone.model.ParityPoorPlayer;
+import xxx.prd.lastone.model.ParityWellPlayer;
 import xxx.prd.lastone.model.RandomPlayer;
 
 public class GameActivity extends Activity {
@@ -51,7 +53,7 @@ public class GameActivity extends Activity {
 
         mMode = getIntent().getIntExtra(INTENT_EXTRA_MODE, MODE_TWO_PLAYERS);
         if(mMode == MODE_ONE_PLAYER) {
-            mComPlayer = new RandomPlayer();
+            mComPlayer = new ParityPoorPlayer();//RandomPlayer();
         }
         mHandler = new Handler();
         mProgressBar = (ProgressBar) findViewById(R.id.progressbar);

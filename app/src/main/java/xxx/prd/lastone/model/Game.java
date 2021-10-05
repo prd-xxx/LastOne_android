@@ -2,6 +2,7 @@ package xxx.prd.lastone.model;
 
 public class Game {
     public static int ROW_NUM = 6;
+    public static int MAX_COL_NUM = 6;
     private int[] mColNums;
     private boolean mIsRedTurn = true;
     private int mRemainPinNum = 0;
@@ -12,6 +13,7 @@ public class Game {
         mColNums = colNums;
         mRemainPinBits = new int[ROW_NUM];
         for(int i=0; i<ROW_NUM; i++) {
+            if(colNums[i] > MAX_COL_NUM) throw new IllegalArgumentException("colNum[" + i + "] is over limit " + MAX_COL_NUM);
             mRemainPinNum += colNums[i];
             mRemainPinBits[i] = (1 << colNums[i]) - 1;
         }
@@ -62,6 +64,7 @@ public class Game {
             }
             sb.append('\n');
         }
+        sb.append(Encoder.encodeToState(this).toString()).append('\n');
         return sb.toString();
     }
 }
