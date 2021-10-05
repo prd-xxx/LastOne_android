@@ -26,8 +26,10 @@ import xxx.prd.lastone.model.Game;
 import xxx.prd.lastone.model.IComPlayer;
 import xxx.prd.lastone.model.Operation;
 import xxx.prd.lastone.model.ParityPoorPlayer;
-import xxx.prd.lastone.model.ParityWellPlayer;
-import xxx.prd.lastone.model.RandomPlayer;
+import xxx.prd.lastone.view.Line;
+import xxx.prd.lastone.view.PaintView;
+import xxx.prd.lastone.view.Pin;
+import xxx.prd.lastone.view.PinState;
 
 public class GameActivity extends Activity {
 
