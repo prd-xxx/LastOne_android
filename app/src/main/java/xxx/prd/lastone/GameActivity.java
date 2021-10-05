@@ -218,8 +218,8 @@ public class GameActivity extends Activity {
     }
 
     private void showTurnSelectDialog() {
+        TextView opponentColor = (TextView) findViewById(R.id.opponent_color);
         DialogInterface.OnClickListener dialogClickListener = (dialog, which) -> {
-            TextView opponentColor = (TextView) findViewById(R.id.opponent_color);
             switch (which){
                 case DialogInterface.BUTTON_POSITIVE:
                     mAreYouFirst = false;
@@ -235,10 +235,19 @@ public class GameActivity extends Activity {
                     break;
             }
         };
+        //バックキー等でダイアログが閉じられた場合は先攻として扱う
+        DialogInterface.OnDismissListener dismissListener = (dialog) -> {
+            mAreYouFirst = true;
+            opponentColor.setTextColor(Color.BLUE);
+            TextView whoseTurn = (TextView) findViewById(R.id.whose_turn);
+            whoseTurn.setText(R.string.you);
+            whoseTurn.invalidate();
+        };
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(getString(R.string.turn_select))
                 .setPositiveButton(R.string.second, dialogClickListener)
                 .setNegativeButton(R.string.first, dialogClickListener)
+                .setOnDismissListener(dismissListener)
                 .show();
     }
 
@@ -255,12 +264,16 @@ public class GameActivity extends Activity {
                     break;
             }
         };
+        DialogInterface.OnDismissListener dismissListener = (dialog) -> {
+            finish();
+        };
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         if(mMode == MODE_ONE_PLAYER) {
             int msgId = mGame.isRedTurn() ^ mAreYouFirst ? R.string.you_lose : R.string.you_win;
             builder.setMessage(getString(msgId))
                     .setPositiveButton(R.string.retry, dialogClickListener)
                     .setNegativeButton(R.string.quit, dialogClickListener)
+                    .setOnDismissListener(dismissListener)
                     .show();
 
         } else {
@@ -268,6 +281,7 @@ public class GameActivity extends Activity {
             builder.setMessage(winColor + getString(R.string.wins))
                     .setPositiveButton(R.string.retry, dialogClickListener)
                     .setNegativeButton(R.string.quit, dialogClickListener)
+                    .setOnDismissListener(dismissListener)
                     .show();
 
         }
