@@ -43,7 +43,8 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintTop_toBottomOf="@id/introduction"/>
+        app:layout_constraintTop_toBottomOf="@id/introduction"
+        android:background="@drawable/button_basic"/>
     <Button
         android:id="@+id/two_players_button"
         android:layout_width="300dp"
@@ -53,7 +54,8 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintTop_toBottomOf="@id/one_player_button"/>
+        app:layout_constraintTop_toBottomOf="@id/one_player_button"
+        android:background="@drawable/button_basic"/>
 
     <TextView
         android:id="@+id/version"
