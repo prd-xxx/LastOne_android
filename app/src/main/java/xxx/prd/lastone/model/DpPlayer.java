@@ -9,22 +9,22 @@ import java.util.Map;
 import java.util.Random;
 
 /**
- * このゲームは 0/1 の grundy数 (というかdp)で表せる (1:必勝, 0:必敗)
- * grundy数が 1ならば、必敗局面の1つを選択する
- * grundy数が 0ならば、RandomMinimumPlayer を使う
+ * このゲームは true/false の dp で解析できる (true:必勝, false:必敗)
+ * true ならば、必敗局面の1つを選択する
+ * false ならば、RandomPlayer を使う
  */
-public class GrundyPlayer implements IComPlayer {
-    private Map<GameState, Integer> mMap = new HashMap<>();
+public class DpPlayer implements IComPlayer {
+    private Map<GameState, Boolean> mMap = new HashMap<>();
 
     @Override
     public Operation chooseOperation(Game game) {
         GameState state = Encoder.encodeToState(game);
-        int grundy = calcGrundy(state);
-        Log.d("grundy", "grundy = " + grundy);
-        if(grundy == 1) {
+        boolean isWin = calcIsWinState(state);
+        Log.d("dp", "state " + (isWin ? "win" : "lose") );
+        if(isWin) {
             List<GameState> candidates = new ArrayList<>();
             for (GameState nextState: state.getNextAvailableStates()) {
-                if(calcGrundy(nextState) == 0) {
+                if(!calcIsWinState(nextState)) {
                     candidates.add(nextState);
                 }
             }
@@ -35,14 +35,14 @@ public class GrundyPlayer implements IComPlayer {
         }
     }
 
-    private int calcGrundy(GameState state) {
+    private boolean calcIsWinState(GameState state) {
         if (mMap.containsKey(state)) return mMap.get(state);
         List<GameState> nextStates = state.getNextAvailableStates();
-        if(nextStates.isEmpty()) return 1;
-        int ret = 0;
+        if(nextStates.isEmpty()) return true;
+        boolean ret = false;
         for (GameState nextState: nextStates) {
-            if (calcGrundy(nextState) == 0) {
-                ret = 1;
+            if (!calcIsWinState(nextState)) {
+                ret = true;
                 break;
             }
         }
