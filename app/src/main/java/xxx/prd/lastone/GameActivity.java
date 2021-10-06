@@ -225,22 +225,7 @@ public class GameActivity extends Activity {
 
     private void showTurnSelectDialog() {
         TextView opponentColor = (TextView) findViewById(R.id.opponent_color);
-        DialogInterface.OnClickListener dialogClickListener = (dialog, which) -> {
-            switch (which){
-                case DialogInterface.BUTTON_POSITIVE:
-                    mAreYouFirst = false;
-                    opponentColor.setTextColor(Color.RED);
-                    operateComTurn();
-                    break;
-                case DialogInterface.BUTTON_NEGATIVE:
-                    mAreYouFirst = true;
-                    opponentColor.setTextColor(Color.BLUE);
-                    TextView whoseTurn = (TextView) findViewById(R.id.whose_turn);
-                    whoseTurn.setText(R.string.you);
-                    whoseTurn.invalidate();
-                    break;
-            }
-        };
+        View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_turn_select, null);
         //バックキー等でダイアログが閉じられた場合は先攻として扱う
         DialogInterface.OnDismissListener dismissListener = (dialog) -> {
             if(opponentColor.getCurrentTextColor() == Color.RED) return;
@@ -252,11 +237,26 @@ public class GameActivity extends Activity {
             whoseTurn.invalidate();
         };
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(getString(R.string.turn_select))
-                .setPositiveButton(R.string.second, dialogClickListener)
-                .setNegativeButton(R.string.first, dialogClickListener)
+        AlertDialog dialog = builder.setView(dialogView)
                 .setOnDismissListener(dismissListener)
-                .show();
+                .create();
+        Button firstButton = (Button) dialogView.findViewById(R.id.first_button);
+        firstButton.setOnClickListener(view -> {
+            mAreYouFirst = true;
+            opponentColor.setTextColor(Color.BLUE);
+            TextView whoseTurn = (TextView) findViewById(R.id.whose_turn);
+            whoseTurn.setText(R.string.you);
+            whoseTurn.invalidate();
+            dialog.dismiss();
+        });
+        Button secondButton = (Button) dialogView.findViewById(R.id.second_button);
+        secondButton.setOnClickListener(view -> {
+            mAreYouFirst = false;
+            opponentColor.setTextColor(Color.RED);
+            operateComTurn();
+            dialog.dismiss();
+        });
+        dialog.show();
     }
 
     private void showGameEndDialog() {
