@@ -11,7 +11,7 @@ import java.util.Random;
 /**
  * このゲームは true/false の dp で解析できる (true:必勝, false:必敗)
  * true ならば、必敗局面の1つを選択する
- * false ならば、RandomPlayer を使う
+ * false ならば、RandomMinimumPlayer を使う
  */
 public class DpPlayer implements IComPlayer {
     private Map<GameState, Boolean> mMap = new HashMap<>();
@@ -31,7 +31,7 @@ public class DpPlayer implements IComPlayer {
             int i = new Random().nextInt(candidates.size());
             return Decoder.decodeToOperation(game, candidates.get(i));
         } else {
-            return new RandomPlayer().chooseOperation(game);
+            return new RandomMinimumPlayer().chooseOperation(game);
         }
     }
 
