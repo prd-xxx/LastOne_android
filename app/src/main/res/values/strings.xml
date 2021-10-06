@@ -20,6 +20,8 @@
     <string name="you_lose">あなたのまけ…</string>
     <string name="retry">もういちど</string>
     <string name="quit">やめる</string>
+    <string name="tweet_1player_win">つよさ「%1$s」にかちました！！</string>
+    <string name="tweet_1player_lose">つよさ「%1$s」にまけました…</string>
     <string name="settings">せってい</string>
     <string name="com_level">あいての　つよさ</string>
     <string name="com_level_poor">へっぽこ</string>
