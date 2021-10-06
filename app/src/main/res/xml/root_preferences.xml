@@ -4,8 +4,8 @@
 
         <ListPreference
             app:defaultValue="weak"
-            app:entries="@array/com_level_entries"
-            app:entryValues="@array/com_level_values"
+            app:entries="@array/com_level_entries_default"
+            app:entryValues="@array/com_level_values_default"
             app:key="com_level"
             app:title="@string/com_level"
             app:useSimpleSummaryProvider="true" />

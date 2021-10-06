@@ -1,11 +1,13 @@
 package xxx.prd.lastone.model;
 
-
 import xxx.prd.lastone.R;
 
 public enum ComPlayer {
     WEAK("weak", ParityPoorPlayer.class, R.string.com_level_weak),
-    NORMAL("normal", ParityWellPlayer.class, R.string.com_level_normal);
+    NORMAL("normal", ParityWellPlayer.class, R.string.com_level_normal),
+    STRONG("strong", StrongPlayer.class, R.string.com_level_strong),
+    VERY_STRONG("very_strong", VeryStrongPlayer.class, R.string.com_level_very_strong),
+    STRONGEST("strongest", DpPlayer.class, R.string.com_level_strongest);
 
     private final String mPrefValue;
     private final Class<? extends IComPlayer> mComPlayerClass;

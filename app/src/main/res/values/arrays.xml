@@ -1,11 +1,43 @@
 <resources>
-    <string-array name="com_level_entries">
+    <string-array name="com_level_entries_default">
         <item>@string/com_level_weak</item>
         <item>@string/com_level_normal</item>
+        <item>@string/com_level_strong</item>
     </string-array>
 
-    <string-array name="com_level_values">
+    <string-array name="com_level_values_default">
         <item>weak</item>
         <item>normal</item>
+        <item>strong</item>
+    </string-array>
+
+    <string-array name="com_level_entries_open1">
+        <item>@string/com_level_weak</item>
+        <item>@string/com_level_normal</item>
+        <item>@string/com_level_strong</item>
+        <item>@string/com_level_very_strong</item>
+    </string-array>
+
+    <string-array name="com_level_values_open1">
+        <item>weak</item>
+        <item>normal</item>
+        <item>strong</item>
+        <item>very_strong</item>
+    </string-array>
+
+    <string-array name="com_level_entries_open2">
+        <item>@string/com_level_weak</item>
+        <item>@string/com_level_normal</item>
+        <item>@string/com_level_strong</item>
+        <item>@string/com_level_very_strong</item>
+        <item>@string/com_level_strongest</item>
+    </string-array>
+
+    <string-array name="com_level_values_open2">
+        <item>weak</item>
+        <item>normal</item>
+        <item>strong</item>
+        <item>very_strong</item>
+        <item>strongest</item>
     </string-array>
 </resources>

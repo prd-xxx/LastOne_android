@@ -30,6 +30,7 @@ import xxx.prd.lastone.model.ComPlayer;
 import xxx.prd.lastone.model.Game;
 import xxx.prd.lastone.model.IComPlayer;
 import xxx.prd.lastone.model.Operation;
+import xxx.prd.lastone.model.stats.StatsPreferences;
 import xxx.prd.lastone.view.Line;
 import xxx.prd.lastone.view.PaintView;
 import xxx.prd.lastone.view.Pin;
@@ -49,6 +50,7 @@ public class GameActivity extends Activity {
     private ProgressBar mProgressBar;
     private TextView mRemainPinsTextView;
     private boolean mAreYouFirst;
+    private ComPlayer mComPlayerEnum;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,15 +63,15 @@ public class GameActivity extends Activity {
         if(mMode == MODE_ONE_PLAYER) {
             SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
             String level = pref.getString(PREF_KEY, ComPlayer.defaultComPlayer().getPrefValue());
-            ComPlayer comPlayer = ComPlayer.findByPrefValue(level);
+            mComPlayerEnum = ComPlayer.findByPrefValue(level);
             try {
-                mComPlayer = comPlayer.getComPlayerClass().newInstance();
+                mComPlayer = mComPlayerEnum.getComPlayerClass().newInstance();
             } catch (IllegalAccessException | InstantiationException e) {
                 e.printStackTrace();
             }
             TextView comLevel = (TextView) findViewById(R.id.opponent_level);
-            comLevel.setText(getString(comPlayer.getNameId()));
-            Log.d("com player", comPlayer.toString());
+            comLevel.setText(getString(mComPlayerEnum.getNameId()));
+            Log.d("com player", mComPlayerEnum.toString());
         } else {
             findViewById(R.id.opponent_color).setVisibility(View.INVISIBLE);
             findViewById(R.id.opponent).setVisibility(View.INVISIBLE);
@@ -271,7 +273,11 @@ public class GameActivity extends Activity {
         };
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         if(mMode == MODE_ONE_PLAYER) {
-            int msgId = mGame.isRedTurn() ^ mAreYouFirst ? R.string.you_lose : R.string.you_win;
+            boolean isWin = mGame.isRedTurn() == mAreYouFirst;
+            StatsPreferences pref = new StatsPreferences(this);
+            pref.addRecentHistory(mComPlayerEnum, isWin);
+            if (isWin) pref.incrementWinCount(mComPlayerEnum);
+            int msgId = isWin ? R.string.you_win : R.string.you_lose;
             builder.setMessage(getString(msgId))
                     .setPositiveButton(R.string.retry, dialogClickListener)
                     .setNegativeButton(R.string.quit, dialogClickListener)

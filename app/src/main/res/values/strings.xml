@@ -22,6 +22,10 @@
     <string name="quit">やめる</string>
     <string name="settings">せってい</string>
     <string name="com_level">あいての　つよさ</string>
+    <string name="com_level_poor">へっぽこ</string>
     <string name="com_level_weak">よわい</string>
     <string name="com_level_normal">ふつう</string>
+    <string name="com_level_strong">つよい</string>
+    <string name="com_level_very_strong">とてもつよい</string>
+    <string name="com_level_strongest">さいきょう</string>
 </resources>
