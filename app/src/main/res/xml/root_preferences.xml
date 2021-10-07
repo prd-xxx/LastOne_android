@@ -1,5 +1,14 @@
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <PreferenceCategory app:title="@string/settings_category_common">
+
+        <SwitchPreferenceCompat
+            app:key="sound"
+            app:title="@string/settings_sound"
+            app:defaultValue="true" />
+
+    </PreferenceCategory>
+
     <PreferenceCategory app:title="@string/one_player_battle">
 
         <ListPreference
