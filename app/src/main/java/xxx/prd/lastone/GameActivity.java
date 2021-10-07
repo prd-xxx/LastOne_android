@@ -37,6 +37,7 @@ import xxx.prd.lastone.model.ComPlayer;
 import xxx.prd.lastone.model.Game;
 import xxx.prd.lastone.model.IComPlayer;
 import xxx.prd.lastone.model.Operation;
+import xxx.prd.lastone.model.Placement;
 import xxx.prd.lastone.model.stats.StatsPreferences;
 import xxx.prd.lastone.view.Line;
 import xxx.prd.lastone.view.PaintView;
@@ -63,6 +64,8 @@ public class GameActivity extends Activity {
     private MediaPlayer mBgmPlayer;
     private SoundPool mSoundPool;
     private int[] mSoundIds;
+    private SharedPreferences mSharedPref;
+    private Placement mPlacement;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,9 +75,9 @@ public class GameActivity extends Activity {
         mPaintView.setActivity(this);
 
         mMode = getIntent().getIntExtra(INTENT_EXTRA_MODE, MODE_TWO_PLAYERS);
+        mSharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         if(mMode == MODE_ONE_PLAYER) {
-            SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
-            String level = pref.getString(PREF_KEY, ComPlayer.defaultComPlayer().getPrefValue());
+            String level = mSharedPref.getString(PREF_KEY, ComPlayer.defaultComPlayer().getPrefValue());
             mComPlayerEnum = ComPlayer.findByPrefValue(level);
             try {
                 mComPlayer = mComPlayerEnum.getComPlayerClass().newInstance();
@@ -92,7 +95,9 @@ public class GameActivity extends Activity {
         mProgressBar = (ProgressBar) findViewById(R.id.progressbar);
         mRemainPinsTextView = (TextView) findViewById(R.id.pin_remain);
 
-        mGame = new Game(new int[]{1,2,3,4,5,6});
+        String gamePlacement = mSharedPref.getString(Placement.PREF_KEY, Placement.PYRAMID.getPrefValue());
+        mPlacement = Placement.fromPrefValue(gamePlacement);
+        mGame = Game.newGame(mPlacement);
         mPins = new List[ROW_NUM];
         for (int i=0; i<ROW_NUM; i++) {
             mPins[i] = new ArrayList<>();
@@ -111,8 +116,7 @@ public class GameActivity extends Activity {
     @Override
     public void onStart() {
         super.onStart();
-        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
-        boolean play = pref.getBoolean("sound", true);
+        boolean play = mSharedPref.getBoolean("sound", true);
         if(play) {
             mBgmPlayer = MediaPlayer.create(this, R.raw.lastone_game);
             mBgmPlayer.setLooping(true);
@@ -344,8 +348,8 @@ public class GameActivity extends Activity {
         if(mMode == MODE_ONE_PLAYER) {
             boolean isWin = mGame.isRedTurn() == mAreYouFirst;
             StatsPreferences pref = new StatsPreferences(this);
-            pref.addRecentHistory(mComPlayerEnum, isWin);
-            if (isWin) pref.incrementWinCount(mComPlayerEnum);
+            pref.addRecentHistory(mComPlayerEnum, mPlacement, isWin);
+            if (isWin) pref.incrementWinCount(mComPlayerEnum, mPlacement);
             int msgId = isWin ? R.string.you_win : R.string.you_lose;
             dialogTitle.setText(getString(msgId));
         } else {
@@ -363,7 +367,8 @@ public class GameActivity extends Activity {
         String tweetText;
         if(mMode == MODE_ONE_PLAYER) {
             String level = getString(mComPlayerEnum.getNameId());
-            tweetText = getString(isWin ? R.string.tweet_1player_win : R.string.tweet_1player_lose, level);
+            String placement = getString(mPlacement.getNameId());
+            tweetText = getString(isWin ? R.string.tweet_1player_win : R.string.tweet_1player_lose, placement, level);
         } else {
             String winColor = getString(mGame.isRedTurn() ? R.string.red : R.string.blue);
             tweetText = winColor + getString(R.string.wins);

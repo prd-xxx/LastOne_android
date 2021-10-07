@@ -20,8 +20,8 @@
     <string name="you_lose">あなたのまけ…</string>
     <string name="retry">もういちど</string>
     <string name="quit">やめる</string>
-    <string name="tweet_1player_win">つよさ「%1$s」にかちました！！</string>
-    <string name="tweet_1player_lose">つよさ「%1$s」にまけました…</string>
+    <string name="tweet_1player_win">はいち「%1$s」で、つよさ「%2$s」にかちました！！</string>
+    <string name="tweet_1player_lose">はいち「%1$s」で、つよさ「%2$s」にまけました…</string>
     <string name="settings">せってい</string>
     <string name="com_level">あいての　つよさ</string>
     <string name="com_level_poor">へっぽこ</string>
@@ -32,5 +32,9 @@
     <string name="com_level_strongest">さいきょう</string>
     <string name="settings_category_common">きょうつう</string>
     <string name="settings_sound">サウンド</string>
-    <string name="settings_hint">ヒント：「%1$s」に　あと%2$dかい　かつと、あたらしい　つよさに　ちょうせん　できます。</string>
+    <string name="settings_placement">はいち</string>
+    <string name="placement_pyramid">ピラミッド</string>
+    <string name="placement_flower">フラワー</string>
+    <string name="placement_random">ランダム</string>
+    <string name="settings_hint">ヒント：「ピラミッド」で、「%1$s」に　あと %2$d かい　かつと、あたらしい　つよさに　ちょうせん　できます。</string>
 </resources>

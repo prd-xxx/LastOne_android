@@ -35,11 +35,11 @@ public class SettingsActivity extends AppCompatActivity {
         int comLevelOpenStage = pref.loadComLevelOpenStage();
         TextView hintText = (TextView) findViewById(R.id.hint_text);
         if (comLevelOpenStage == 0) {
-            int winCount = pref.loadWinCount(ComPlayer.STRONG);
+            int winCount = pref.loadPyramidWinCount(ComPlayer.STRONG);
             String hint = getString(R.string.settings_hint, getString(R.string.com_level_strong), 3 - winCount);
             hintText.setText(hint);
         } else if (comLevelOpenStage == 1) {
-            int winCount = pref.loadWinCount(ComPlayer.VERY_STRONG);
+            int winCount = pref.loadPyramidWinCount(ComPlayer.VERY_STRONG);
             String hint = getString(R.string.settings_hint, getString(R.string.com_level_very_strong), 3 - winCount);
             hintText.setText(hint);
         } else {

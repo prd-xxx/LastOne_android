@@ -1,4 +1,14 @@
 <resources>
+    <string-array name="placement_entries">
+        <item>@string/placement_pyramid</item>
+        <item>@string/placement_flower</item>
+    </string-array>
+
+    <string-array name="placement_values">
+        <item>pyramid</item>
+        <item>flower</item>
+    </string-array>
+
     <string-array name="com_level_entries_default">
         <item>@string/com_level_weak</item>
         <item>@string/com_level_normal</item>

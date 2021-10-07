@@ -7,6 +7,14 @@
             app:title="@string/settings_sound"
             app:defaultValue="true" />
 
+        <ListPreference
+            app:defaultValue="pyramid"
+            app:entries="@array/placement_entries"
+            app:entryValues="@array/placement_values"
+            app:key="placement"
+            app:title="@string/settings_placement"
+            app:useSimpleSummaryProvider="true" />
+
     </PreferenceCategory>
 
     <PreferenceCategory app:title="@string/one_player_battle">
