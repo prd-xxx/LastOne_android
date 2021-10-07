@@ -30,4 +30,6 @@
     <string name="com_level_strong">つよい</string>
     <string name="com_level_very_strong">とてもつよい</string>
     <string name="com_level_strongest">さいきょう</string>
+    <string name="settings_category_common">きょうつう</string>
+    <string name="settings_sound">サウンド</string>
 </resources>

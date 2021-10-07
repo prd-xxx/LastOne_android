@@ -6,12 +6,17 @@ import static xxx.prd.lastone.GameActivity.MODE_TWO_PLAYERS;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.widget.TextView;
 
+import androidx.preference.PreferenceManager;
+
 public class TopActivity extends Activity {
+    private MediaPlayer mMediaPlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +45,27 @@ public class TopActivity extends Activity {
             versionName.setText(version);
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean play = pref.getBoolean("sound", true);
+        if(play) {
+            mMediaPlayer = MediaPlayer.create(this, R.raw.lastone_system);
+            mMediaPlayer.setLooping(true);
+            mMediaPlayer.start();
+        }
+    }
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (mMediaPlayer != null) {
+            mMediaPlayer.stop();
+            mMediaPlayer.release();
+            mMediaPlayer = null;
         }
     }
 }
