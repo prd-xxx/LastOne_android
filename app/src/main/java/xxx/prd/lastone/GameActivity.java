@@ -10,12 +10,16 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -30,6 +34,7 @@ import xxx.prd.lastone.model.ComPlayer;
 import xxx.prd.lastone.model.Game;
 import xxx.prd.lastone.model.IComPlayer;
 import xxx.prd.lastone.model.Operation;
+import xxx.prd.lastone.model.stats.StatsPreferences;
 import xxx.prd.lastone.view.Line;
 import xxx.prd.lastone.view.PaintView;
 import xxx.prd.lastone.view.Pin;
@@ -49,6 +54,7 @@ public class GameActivity extends Activity {
     private ProgressBar mProgressBar;
     private TextView mRemainPinsTextView;
     private boolean mAreYouFirst;
+    private ComPlayer mComPlayerEnum;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,15 +67,15 @@ public class GameActivity extends Activity {
         if(mMode == MODE_ONE_PLAYER) {
             SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
             String level = pref.getString(PREF_KEY, ComPlayer.defaultComPlayer().getPrefValue());
-            ComPlayer comPlayer = ComPlayer.findByPrefValue(level);
+            mComPlayerEnum = ComPlayer.findByPrefValue(level);
             try {
-                mComPlayer = comPlayer.getComPlayerClass().newInstance();
+                mComPlayer = mComPlayerEnum.getComPlayerClass().newInstance();
             } catch (IllegalAccessException | InstantiationException e) {
                 e.printStackTrace();
             }
             TextView comLevel = (TextView) findViewById(R.id.opponent_level);
-            comLevel.setText(getString(comPlayer.getNameId()));
-            Log.d("com player", comPlayer.toString());
+            comLevel.setText(getString(mComPlayerEnum.getNameId()));
+            Log.d("com player", mComPlayerEnum.toString());
         } else {
             findViewById(R.id.opponent_color).setVisibility(View.INVISIBLE);
             findViewById(R.id.opponent).setVisibility(View.INVISIBLE);
@@ -219,22 +225,7 @@ public class GameActivity extends Activity {
 
     private void showTurnSelectDialog() {
         TextView opponentColor = (TextView) findViewById(R.id.opponent_color);
-        DialogInterface.OnClickListener dialogClickListener = (dialog, which) -> {
-            switch (which){
-                case DialogInterface.BUTTON_POSITIVE:
-                    mAreYouFirst = false;
-                    opponentColor.setTextColor(Color.RED);
-                    operateComTurn();
-                    break;
-                case DialogInterface.BUTTON_NEGATIVE:
-                    mAreYouFirst = true;
-                    opponentColor.setTextColor(Color.BLUE);
-                    TextView whoseTurn = (TextView) findViewById(R.id.whose_turn);
-                    whoseTurn.setText(R.string.you);
-                    whoseTurn.invalidate();
-                    break;
-            }
-        };
+        View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_turn_select, null);
         //バックキー等でダイアログが閉じられた場合は先攻として扱う
         DialogInterface.OnDismissListener dismissListener = (dialog) -> {
             if(opponentColor.getCurrentTextColor() == Color.RED) return;
@@ -246,47 +237,79 @@ public class GameActivity extends Activity {
             whoseTurn.invalidate();
         };
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(getString(R.string.turn_select))
-                .setPositiveButton(R.string.second, dialogClickListener)
-                .setNegativeButton(R.string.first, dialogClickListener)
+        AlertDialog dialog = builder.setView(dialogView)
                 .setOnDismissListener(dismissListener)
-                .show();
+                .create();
+        Button firstButton = (Button) dialogView.findViewById(R.id.first_button);
+        firstButton.setOnClickListener(view -> {
+            mAreYouFirst = true;
+            opponentColor.setTextColor(Color.BLUE);
+            TextView whoseTurn = (TextView) findViewById(R.id.whose_turn);
+            whoseTurn.setText(R.string.you);
+            whoseTurn.invalidate();
+            dialog.dismiss();
+        });
+        Button secondButton = (Button) dialogView.findViewById(R.id.second_button);
+        secondButton.setOnClickListener(view -> {
+            mAreYouFirst = false;
+            opponentColor.setTextColor(Color.RED);
+            operateComTurn();
+            dialog.dismiss();
+        });
+        dialog.show();
     }
 
     private void showGameEndDialog() {
-        DialogInterface.OnClickListener dialogClickListener = (dialog, which) -> {
-            switch (which){
-                case DialogInterface.BUTTON_POSITIVE:
-                    Intent intent = new Intent(GameActivity.this, GameActivity.class);
-                    intent.putExtra(INTENT_EXTRA_MODE, mMode);
-                    startActivity(intent);
-                    break;
-                case DialogInterface.BUTTON_NEGATIVE:
-                    finish();
-                    break;
-            }
-        };
+        View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_game_end, null);
+        Button retryButton = (Button) dialogView.findViewById(R.id.retry_button);
+        retryButton.setOnClickListener(view -> {
+            Intent intent = new Intent(GameActivity.this, GameActivity.class);
+            intent.putExtra(INTENT_EXTRA_MODE, mMode);
+            startActivity(intent);
+        });
+        Button quitButton = (Button) dialogView.findViewById(R.id.quit_button);
+        quitButton.setOnClickListener(view -> finish());
+        ImageButton tweetButton = (ImageButton) dialogView.findViewById(R.id.tweet_button);
+        tweetButton.setOnClickListener(view -> {
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(getTweetResultText()));
+            startActivity(intent);
+        });
         DialogInterface.OnDismissListener dismissListener = (dialog) -> {
             finish();
         };
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        if(mMode == MODE_ONE_PLAYER) {
-            int msgId = mGame.isRedTurn() ^ mAreYouFirst ? R.string.you_lose : R.string.you_win;
-            builder.setMessage(getString(msgId))
-                    .setPositiveButton(R.string.retry, dialogClickListener)
-                    .setNegativeButton(R.string.quit, dialogClickListener)
-                    .setOnDismissListener(dismissListener)
-                    .show();
+        TextView dialogTitle = (TextView) dialogView.findViewById(R.id.dialog_title);
 
+        if(mMode == MODE_ONE_PLAYER) {
+            boolean isWin = mGame.isRedTurn() == mAreYouFirst;
+            StatsPreferences pref = new StatsPreferences(this);
+            pref.addRecentHistory(mComPlayerEnum, isWin);
+            if (isWin) pref.incrementWinCount(mComPlayerEnum);
+            int msgId = isWin ? R.string.you_win : R.string.you_lose;
+            dialogTitle.setText(getString(msgId));
         } else {
             String winColor = getString(mGame.isRedTurn() ? R.string.red : R.string.blue);
-            builder.setMessage(winColor + getString(R.string.wins))
-                    .setPositiveButton(R.string.retry, dialogClickListener)
-                    .setNegativeButton(R.string.quit, dialogClickListener)
-                    .setOnDismissListener(dismissListener)
-                    .show();
-
+            dialogTitle.setText(winColor + getString(R.string.wins));
         }
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setView(dialogView)
+                .setOnDismissListener(dismissListener)
+                .show();
+    }
+    private String getTweetResultText() {
+        boolean isWin = mGame.isRedTurn() == mAreYouFirst;
+        StringBuilder url = new StringBuilder();
+        String tweetText;
+        if(mMode == MODE_ONE_PLAYER) {
+            String level = getString(mComPlayerEnum.getNameId());
+            tweetText = getString(isWin ? R.string.tweet_1player_win : R.string.tweet_1player_lose, level);
+        } else {
+            String winColor = getString(mGame.isRedTurn() ? R.string.red : R.string.blue);
+            tweetText = winColor + getString(R.string.wins);
+        }
+        url.append("https://twitter.com/share?text=").append(tweetText)
+                .append("&hashtags=").append("ラストワン,LastOne_App")
+                .append("&url=").append("https://play.google.com/store/apps/details?id=xxx.prd.lastone");
+        return url.toString();
     }
 
     private class PinsRowLayout extends LinearLayout {
