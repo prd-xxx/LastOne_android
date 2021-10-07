@@ -32,4 +32,5 @@
     <string name="com_level_strongest">さいきょう</string>
     <string name="settings_category_common">きょうつう</string>
     <string name="settings_sound">サウンド</string>
+    <string name="settings_hint">ヒント：「%1$s」に　あと%2$dかい　かつと、あたらしい　つよさに　ちょうせん　できます。</string>
 </resources>

@@ -45,6 +45,10 @@ public class StatsPreferences {
     public int loadComLevelOpenStage() {
         return loadInt(KEY_COM_LEVEL_OPEN, 0);
     }
+    public int loadWinCount(ComPlayer comPlayer) {
+        String key = PREFIX_WIN_COUNT + comPlayer.toString();
+        return loadInt(key, 0);
+    }
     public void addRecentHistory(ComPlayer comPlayer, boolean isWin) {
         String key = PREFIX_HISTORY + comPlayer.toString();
         String history = loadString(key, "");
