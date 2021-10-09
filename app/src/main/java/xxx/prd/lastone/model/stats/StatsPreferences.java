@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.util.Log;
 
 import xxx.prd.lastone.model.ComPlayer;
+import xxx.prd.lastone.model.Placement;
 
 public class StatsPreferences {
     private static final String PREF_NAME = "stats";
@@ -31,22 +32,28 @@ public class StatsPreferences {
     private String loadString(String key, String defValue) {
         return getSharedPreferences().getString(key, defValue);
     }
-    public void incrementWinCount(ComPlayer comPlayer) {
-        String key = PREFIX_WIN_COUNT + comPlayer.toString();
+    public void incrementWinCount(ComPlayer comPlayer, Placement placement) {
+        String key = PREFIX_WIN_COUNT + comPlayer.toString() + placement.getSuffixForStats();
         int c = loadInt(key, 0) + 1;
-        if (comPlayer == ComPlayer.STRONG && c==3) {
-            saveInt(KEY_COM_LEVEL_OPEN, 1);
-        } else if (comPlayer == ComPlayer.VERY_STRONG && c==3) {
-            saveInt(KEY_COM_LEVEL_OPEN, 2);
-        }
-        Log.d("save", "key=" + key + ", c=" + c);
         saveInt(key, c);
+        Log.d("save", "key=" + key + ", c=" + c);
+        if(placement == Placement.PYRAMID) {
+            if (comPlayer == ComPlayer.STRONG && c == 3) {
+                saveInt(KEY_COM_LEVEL_OPEN, 1);
+            } else if (comPlayer == ComPlayer.VERY_STRONG && c == 3) {
+                saveInt(KEY_COM_LEVEL_OPEN, 2);
+            }
+        }
     }
     public int loadComLevelOpenStage() {
         return loadInt(KEY_COM_LEVEL_OPEN, 0);
     }
-    public void addRecentHistory(ComPlayer comPlayer, boolean isWin) {
-        String key = PREFIX_HISTORY + comPlayer.toString();
+    public int loadPyramidWinCount(ComPlayer comPlayer) {
+        String keyPyramid = PREFIX_WIN_COUNT + comPlayer.toString() + Placement.PYRAMID.getSuffixForStats();
+        return loadInt(keyPyramid, 0);
+    }
+    public void addRecentHistory(ComPlayer comPlayer, Placement placement, boolean isWin) {
+        String key = PREFIX_HISTORY + comPlayer.toString() + placement.getSuffixForStats();
         String history = loadString(key, "");
         history += (isWin ? "o" : "x");
         if (history.length() > HISTORY_LENGTH) history = history.substring(1);

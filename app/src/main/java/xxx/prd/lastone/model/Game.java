@@ -1,5 +1,7 @@
 package xxx.prd.lastone.model;
 
+import java.util.Random;
+
 public class Game {
     public static int ROW_NUM = 6;
     public static int MAX_COL_NUM = 6;
@@ -8,7 +10,7 @@ public class Game {
     private int mRemainPinNum = 0;
     private int[] mRemainPinBits;
 
-    public Game(int[] colNums) {
+    private Game(int[] colNums) {
         if(colNums.length != ROW_NUM) throw new IllegalArgumentException("colNums length must be " + ROW_NUM);
         mColNums = colNums;
         mRemainPinBits = new int[ROW_NUM];
@@ -17,6 +19,35 @@ public class Game {
             mRemainPinNum += colNums[i];
             mRemainPinBits[i] = (1 << colNums[i]) - 1;
         }
+    }
+    public static Game newGame(Placement placement) {
+        switch (placement) {
+            case PYRAMID: return newPyramidGame();
+            case FLOWER: return newFlowerGame();
+            case RANDOM: return newRandomGame();
+            default: return newPyramidGame();
+        }
+    }
+    private static Game newPyramidGame() {
+        return new Game(new int[]{1,2,3,4,5,6});
+    }
+    private static Game newFlowerGame() {
+        return new Game(new int[]{3,4,4,2,6,5});
+    }
+    private static Game newRandomGame() {
+        Random random = new Random();
+        int[] array;
+        while(true) {
+            int sum = 0;
+            array = new int[ROW_NUM];
+            for(int i=0; i<ROW_NUM; i++) {
+                int c = random.nextInt(MAX_COL_NUM) + 1;
+                sum += c;
+                array[i] = c;
+            }
+            if (sum >= 21) break;
+        }
+        return new Game(array);
     }
     public int getColNum(int rowIndex) {
         return mColNums[rowIndex];
