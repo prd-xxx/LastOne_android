@@ -37,4 +37,6 @@
     <string name="placement_flower">フラワー</string>
     <string name="placement_random">ランダム</string>
     <string name="settings_hint">ヒント：「ピラミッド」で、「%1$s」に　あと %2$d かい　かつと、あたらしい　つよさに　ちょうせん　できます。</string>
+    <string name="history_title">たいせん　りれき</string>
+>
 </resources>
