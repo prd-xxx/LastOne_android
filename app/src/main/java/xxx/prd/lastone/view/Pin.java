@@ -16,7 +16,9 @@ public class Pin extends androidx.appcompat.widget.AppCompatImageView {
         setPinState(PinState.ALIVE);
         int WC = ViewGroup.LayoutParams.WRAP_CONTENT;
         setLayoutParams(new ViewGroup.LayoutParams(WC,WC));
-        setPaddingRelative(63,0,63,0);
+        float density = getResources().getDisplayMetrics().density;
+        int horizontalPaddingPx = (int)(density * 21);
+        setPaddingRelative(horizontalPaddingPx,0,horizontalPaddingPx,0);
     }
 
     public void setPinState(PinState pinState) {
