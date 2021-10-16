@@ -10,43 +10,45 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="16dp"
-        android:layout_marginStart="16dp"
-        android:textSize="16sp"/>
+        android:layout_marginTop="@dimen/margin_double"
+        android:layout_marginStart="@dimen/margin_double"
+        android:textSize="@dimen/text_game_small"/>
 
     <ImageButton
         android:id="@+id/tweet_button"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
+        android:layout_width="@dimen/button_icon"
+        android:layout_height="@dimen/button_icon"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/dialog_title"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
-        android:layout_marginStart="16dp"
+        android:layout_marginTop="@dimen/margin_double"
+        android:layout_marginBottom="@dimen/margin_double"
+        android:layout_marginStart="@dimen/margin_double"
         android:background="@drawable/twitter_logo_blue_48"
         />
 
     <Button
         android:id="@+id/retry_button"
-        android:layout_width="80dp"
-        android:layout_height="28dp"
+        android:layout_width="@dimen/dialog_button_width"
+        android:layout_height="@dimen/dialog_button_height"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginBottom="16dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="@dimen/margin_double"
+        android:layout_marginEnd="@dimen/margin_double"
         android:background="@drawable/button_basic"
-        android:text="@string/retry"/>
+        android:text="@string/retry"
+        android:textSize="@dimen/text_button"/>
 
     <Button
         android:id="@+id/quit_button"
-        android:layout_width="80dp"
-        android:layout_height="28dp"
+        android:layout_width="@dimen/dialog_button_width"
+        android:layout_height="@dimen/dialog_button_height"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/retry_button"
-        android:layout_marginBottom="16dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="@dimen/margin_double"
+        android:layout_marginEnd="@dimen/margin_double"
         android:background="@drawable/button_basic"
-        android:text="@string/quit"/>
+        android:text="@string/quit"
+        android:textSize="@dimen/text_button"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

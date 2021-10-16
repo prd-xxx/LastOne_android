@@ -12,10 +12,10 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="8dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginTop="@dimen/margin_unit"
+        android:layout_marginStart="@dimen/margin_unit"
         android:text="@string/red"
-        android:textSize="20sp"
+        android:textSize="@dimen/text_game_normal"
         android:textColor="#ff0000"
         />
     <TextView
@@ -23,9 +23,9 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toEndOf="@id/whose_turn"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="@dimen/margin_unit"
         android:text="@string/s_turn"
-        android:textSize="20sp"
+        android:textSize="@dimen/text_game_normal"
         />
 
     <TextView
@@ -34,18 +34,18 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:textSize="20sp"
+        android:layout_marginTop="@dimen/margin_unit"
+        android:layout_marginEnd="@dimen/margin_unit"
+        android:textSize="@dimen/text_game_normal"
     />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toStartOf="@id/pin_remain"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="@dimen/margin_unit"
         android:text="@string/remain"
-        android:textSize="20sp"
+        android:textSize="@dimen/text_game_normal"
         />
 
     <TextView
@@ -54,10 +54,10 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/whose_turn"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="8dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginTop="@dimen/margin_unit"
+        android:layout_marginStart="@dimen/margin_unit"
         android:text="@string/opponent_color_sign"
-        android:textSize="16sp"
+        android:textSize="@dimen/text_game_small"
         />
     <TextView
         android:id="@+id/opponent"
@@ -65,9 +65,9 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/whose_turn"
         app:layout_constraintStart_toEndOf="@id/opponent_color"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="@dimen/margin_unit"
         android:text="@string/opppnent"
-        android:textSize="16sp"
+        android:textSize="@dimen/text_game_small"
         />
     <TextView
         android:id="@+id/opponent_level"
@@ -75,14 +75,14 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/whose_turn"
         app:layout_constraintStart_toEndOf="@id/opponent"
-        android:layout_marginTop="8dp"
-        android:textSize="16sp"
+        android:layout_marginTop="@dimen/margin_unit"
+        android:textSize="@dimen/text_game_small"
         />
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="@dimen/margin_double"
         app:layout_constraintTop_toBottomOf="@id/opponent">
         <LinearLayout
             android:id="@+id/game_linearlayout"
