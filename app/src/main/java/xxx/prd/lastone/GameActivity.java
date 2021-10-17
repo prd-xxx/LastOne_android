@@ -385,7 +385,8 @@ public class GameActivity extends Activity {
             int WC = ViewGroup.LayoutParams.WRAP_CONTENT;
             int MP = ViewGroup.LayoutParams.MATCH_PARENT;
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(MP,WC);
-            lp.setMargins(0,16,0,0);
+            int verticalMargin = (int) getResources().getDimension(R.dimen.pin_vertical_margin);
+            lp.setMargins(0,verticalMargin,0,0);
             setLayoutParams(lp);
             setGravity(Gravity.CENTER_HORIZONTAL);
             setTag(R.id.TAG_ROW_INDEX, rowIndex);

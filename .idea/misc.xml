@@ -7,15 +7,25 @@
         <entry key="..\:/Users/Ryohei/AndroidStudioProjects/LastOne/app/src/main/res/drawable/button_blue.xml" value="0.1609375" />
         <entry key="..\:/Users/Ryohei/AndroidStudioProjects/LastOne/app/src/main/res/drawable/button_red.xml" value="0.1609375" />
         <entry key="..\:/Users/Ryohei/AndroidStudioProjects/LastOne/app/src/main/res/drawable/ic_baseline_settings_24.xml" value="0.17916666666666667" />
+        <entry key="..\:/Users/Ryohei/AndroidStudioProjects/LastOne/app/src/main/res/drawable/page_indicator_dot.xml" value="0.2015625" />
         <entry key="..\:/Users/Ryohei/AndroidStudioProjects/LastOne/app/src/main/res/drawable/pin_alive.xml" value="0.19375" />
         <entry key="..\:/Users/Ryohei/AndroidStudioProjects/LastOne/app/src/main/res/drawable/pin_blue.xml" value="0.19375" />
         <entry key="..\:/Users/Ryohei/AndroidStudioProjects/LastOne/app/src/main/res/drawable/pin_red.xml" value="0.19375" />
         <entry key="..\:/Users/Ryohei/AndroidStudioProjects/LastOne/app/src/main/res/drawable/pin_selected.xml" value="0.19375" />
+        <entry key="..\:/Users/Ryohei/AndroidStudioProjects/LastOne/app/src/main/res/drawable/pin_selecting.xml" value="0.14375" />
         <entry key="..\:/Users/Ryohei/AndroidStudioProjects/LastOne/app/src/main/res/layout/activity_game.xml" value="0.1838768115942029" />
+        <entry key="..\:/Users/Ryohei/AndroidStudioProjects/LastOne/app/src/main/res/layout/activity_history.xml" value="0.18541666666666667" />
         <entry key="..\:/Users/Ryohei/AndroidStudioProjects/LastOne/app/src/main/res/layout/activity_top.xml" value="0.17760416666666667" />
+        <entry key="..\:/Users/Ryohei/AndroidStudioProjects/LastOne/app/src/main/res/layout/content_history.xml" value="0.17135416666666667" />
+        <entry key="..\:/Users/Ryohei/AndroidStudioProjects/LastOne/app/src/main/res/layout/custom_preference_material.xml" value="0.19739583333333333" />
         <entry key="..\:/Users/Ryohei/AndroidStudioProjects/LastOne/app/src/main/res/layout/dialog_game_end.xml" value="0.14479166666666668" />
         <entry key="..\:/Users/Ryohei/AndroidStudioProjects/LastOne/app/src/main/res/layout/dialog_turn_select.xml" value="0.15677083333333333" />
+        <entry key="..\:/Users/Ryohei/AndroidStudioProjects/LastOne/app/src/main/res/layout/nav_header_history.xml" value="0.18541666666666667" />
         <entry key="..\:/Users/Ryohei/AndroidStudioProjects/LastOne/app/src/main/res/layout/settings_activity.xml" value="0.23802083333333332" />
+        <entry key="..\:/Users/Ryohei/AndroidStudioProjects/LastOne/app/src/main/res/layout/view_custom_preference_category.xml" value="0.15677083333333333" />
+        <entry key="..\:/Users/Ryohei/AndroidStudioProjects/LastOne/app/src/main/res/layout/view_custom_preference_title.xml" value="0.15677083333333333" />
+        <entry key="..\:/Users/Ryohei/AndroidStudioProjects/LastOne/app/src/main/res/layout/view_hisory_pager.xml" value="0.1390625" />
+        <entry key="..\:/Users/Ryohei/AndroidStudioProjects/LastOne/app/src/main/res/layout/view_page_indicator.xml" value="0.18541666666666667" />
         <entry key="..\:/Users/Ryohei/AndroidStudioProjects/LastOne/app/src/main/res/xml/root_preferences.xml" value="0.15364583333333334" />
       </map>
     </option>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="margin_double">10.67dp</dimen>
+    <dimen name="margin_unit">5.33dp</dimen>
+    <dimen name="margin_half">2.67dp</dimen>
+    <dimen name="margin_quarter">1.33dp</dimen>
+    <dimen name="pin_height">40dp</dimen>
+    <dimen name="pin_width">5.33dp</dimen>
+    <dimen name="pin_horizontal_padding">14dp</dimen>
+    <dimen name="pin_vertical_margin">10.67dp</dimen>
+    <dimen name="dialog_button_height">18.67dp</dimen>
+    <dimen name="dialog_button_width">53.3dp</dimen>
+    <dimen name="button_icon">16dp</dimen>
+    <dimen name="top_blank">42.67dp</dimen>
+    <dimen name="top_button_width">200dp</dimen>
+    <dimen name="text_game_normal">13.33sp</dimen>
+    <dimen name="text_game_small">10.67sp</dimen>
+    <dimen name="text_button">9.33sp</dimen>
+    <dimen name="text_title">21.33sp</dimen>
+    <dimen name="text_small">9.33sp</dimen>
+</resources>

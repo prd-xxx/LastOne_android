@@ -11,16 +11,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="@dimen/top_blank"
         android:text="@string/app_title"
-        android:textSize="32sp"
+        android:textSize="@dimen/text_title"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/title_image"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="@dimen/top_blank"
         android:src="@drawable/pin_alive"
         app:layout_constraintTop_toBottomOf="@id/title_text"/>
 
@@ -29,17 +29,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="@dimen/top_blank"
         android:text="@string/introduction"
-        android:textSize="14sp"
+        android:textSize="@dimen/text_small"
         app:layout_constraintTop_toBottomOf="@id/title_image" />
 
     <Button
         android:id="@+id/one_player_button"
-        android:layout_width="300dp"
+        android:layout_width="@dimen/top_button_width"
         android:layout_height="wrap_content"
         android:text="@string/one_player_battle"
-        android:layout_marginTop="64dp"
+        android:textSize="@dimen/text_button"
+        android:layout_marginTop="@dimen/top_blank"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -47,10 +48,11 @@
         android:background="@drawable/button_basic"/>
     <Button
         android:id="@+id/two_players_button"
-        android:layout_width="300dp"
+        android:layout_width="@dimen/top_button_width"
         android:layout_height="wrap_content"
         android:text="@string/two_players_battle"
-        android:layout_marginTop="20dp"
+        android:textSize="@dimen/text_button"
+        android:layout_marginTop="@dimen/margin_double"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -62,30 +64,30 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/version"
-        android:textSize="16sp"
+        android:textSize="@dimen/text_small"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginStart="8dp"
-        android:layout_marginBottom="8dp" />
+        android:layout_marginStart="@dimen/margin_unit"
+        android:layout_marginBottom="@dimen/margin_unit" />
     <TextView
         android:id="@+id/version_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="14sp"
+        android:textSize="@dimen/text_small"
         app:layout_constraintStart_toEndOf="@id/version"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginStart="8dp"
-        android:layout_marginBottom="8dp" />
+        android:layout_marginStart="@dimen/margin_unit"
+        android:layout_marginBottom="@dimen/margin_unit" />
 
     <ImageView
         android:id="@+id/settings_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/button_icon"
+        android:layout_height="@dimen/button_icon"
         android:src="@drawable/ic_baseline_settings_24"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp" />
+        android:layout_marginEnd="@dimen/margin_unit"
+        android:layout_marginBottom="@dimen/margin_unit" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
