@@ -4,8 +4,8 @@
     <dimen name="margin_unit">16dp</dimen>
     <dimen name="margin_half">8dp</dimen>
     <dimen name="margin_quarter">4dp</dimen>
-    <dimen name="pin_height">120dp</dimen>
-    <dimen name="pin_width">16dp</dimen>
+    <dimen name="pin_height">90dp</dimen>
+    <dimen name="pin_width">12dp</dimen>
     <dimen name="pin_horizontal_padding">42dp</dimen>
     <dimen name="pin_vertical_margin">16dp</dimen>
     <dimen name="dialog_button_height">56dp</dimen>
