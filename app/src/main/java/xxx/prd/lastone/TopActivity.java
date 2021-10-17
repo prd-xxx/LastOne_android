@@ -37,6 +37,10 @@ public class TopActivity extends Activity {
             Intent intent = new Intent(TopActivity.this, SettingsActivity.class);
             startActivity(intent);
         });
+        findViewById(R.id.history_button).setOnClickListener(view -> {
+            Intent intent = new Intent(TopActivity.this, HistoryActivity.class);
+            startActivity(intent);
+        });
 
         TextView versionName = (TextView) findViewById(R.id.version_name);
         try {
