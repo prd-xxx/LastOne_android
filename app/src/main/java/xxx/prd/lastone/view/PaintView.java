@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import xxx.prd.lastone.GameActivity;
+import xxx.prd.lastone.R;
 
 public class PaintView extends View {
     private Paint mPaint;
@@ -40,7 +41,8 @@ public class PaintView extends View {
     private void init() {
         mPaint = new Paint();
         mPaint.setAntiAlias(true);
-        mPaint.setStrokeWidth(4);
+        int width = (int) getResources().getDimension(R.dimen.margin_quarter);
+        mPaint.setStrokeWidth(width);
         mCurrentLine = new Line();
         mRedDefiniteLines = new ArrayList<>();
         mBlueDefiniteLines = new ArrayList<>();

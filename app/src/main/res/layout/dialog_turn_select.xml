@@ -10,10 +10,10 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="8dp"
-        android:layout_marginStart="16dp"
+        android:layout_marginTop="@dimen/margin_unit"
+        android:layout_marginStart="@dimen/margin_double"
         android:text="@string/turn_select"
-        android:textSize="16sp"/>
+        android:textSize="@dimen/text_game_small"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -21,26 +21,28 @@
         android:orientation="horizontal"
         app:layout_constraintTop_toBottomOf="@id/dialog_title"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginVertical="8dp">
+        android:layout_marginHorizontal="@dimen/margin_double"
+        android:layout_marginVertical="@dimen/margin_unit">
         <Button
             android:id="@+id/first_button"
             android:layout_width="0dp"
-            android:layout_height="28dp"
+            android:layout_height="@dimen/dialog_button_height"
             android:layout_weight="1"
-            android:layout_marginEnd="4dp"
+            android:layout_marginEnd="@dimen/margin_half"
             android:background="@drawable/button_red"
             android:text="@string/first"
-            android:textColor="#ff0000"/>
+            android:textColor="#ff0000"
+            android:textSize="@dimen/text_button"/>
         <Button
             android:id="@+id/second_button"
             android:layout_width="0dp"
-            android:layout_height="28dp"
+            android:layout_height="@dimen/dialog_button_height"
             android:layout_weight="1"
-            android:layout_marginStart="4dp"
+            android:layout_marginStart="@dimen/margin_half"
             android:background="@drawable/button_blue"
             android:text="@string/second"
-            android:textColor="#0000ff"/>
+            android:textColor="#0000ff"
+            android:textSize="@dimen/text_button"/>
     </LinearLayout>
 
 

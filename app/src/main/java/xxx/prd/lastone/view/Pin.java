@@ -3,6 +3,8 @@ package xxx.prd.lastone.view;
 import android.content.Context;
 import android.view.ViewGroup;
 
+import xxx.prd.lastone.R;
+
 public class Pin extends androidx.appcompat.widget.AppCompatImageView {
     private final int[] mLocation;
     private final Context mContext;
@@ -16,7 +18,8 @@ public class Pin extends androidx.appcompat.widget.AppCompatImageView {
         setPinState(PinState.ALIVE);
         int WC = ViewGroup.LayoutParams.WRAP_CONTENT;
         setLayoutParams(new ViewGroup.LayoutParams(WC,WC));
-        setPaddingRelative(63,0,63,0);
+        int horizontalPadding = (int) getResources().getDimension(R.dimen.pin_horizontal_padding);
+        setPaddingRelative(horizontalPadding,0,horizontalPadding,0);
     }
 
     public void setPinState(PinState pinState) {
