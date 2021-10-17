@@ -7,6 +7,7 @@
     <dimen name="pin_height">90dp</dimen>
     <dimen name="pin_width">12dp</dimen>
     <dimen name="pin_horizontal_padding">35dp</dimen>
+    <dimen name="pin_vertical_margin">16dp</dimen>
     <dimen name="dialog_button_height">42dp</dimen>
     <dimen name="dialog_button_width">120dp</dimen>
     <dimen name="button_icon">36dp</dimen>
