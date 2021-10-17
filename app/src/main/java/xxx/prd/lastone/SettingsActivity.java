@@ -10,8 +10,10 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.ListPreference;
 import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.SwitchPreferenceCompat;
 
 import xxx.prd.lastone.model.ComPlayer;
+import xxx.prd.lastone.model.Placement;
 import xxx.prd.lastone.model.stats.StatsPreferences;
 
 public class SettingsActivity extends AppCompatActivity {
@@ -52,16 +54,23 @@ public class SettingsActivity extends AppCompatActivity {
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
             setPreferencesFromResource(R.xml.root_preferences, rootKey);
 
+            SwitchPreferenceCompat soundPreference = (SwitchPreferenceCompat) findPreference("sound");
+            soundPreference.setLayoutResource(R.layout.custom_preference_material);
+
+            ListPreference placementPreference = (ListPreference) findPreference(Placement.PREF_KEY);
+            placementPreference.setLayoutResource(R.layout.custom_preference_material);
+
+            ListPreference comLevelPreference = (ListPreference) findPreference(PREF_KEY);
+            comLevelPreference.setLayoutResource(R.layout.custom_preference_material);
+
             StatsPreferences pref = new StatsPreferences(getActivity());
             int comLevelOpenStage = pref.loadComLevelOpenStage();
             if (comLevelOpenStage == 1) {
-                ListPreference lp = (ListPreference) findPreference(PREF_KEY);
-                lp.setEntries(R.array.com_level_entries_open1);
-                lp.setEntryValues(R.array.com_level_values_open1);
+                comLevelPreference.setEntries(R.array.com_level_entries_open1);
+                comLevelPreference.setEntryValues(R.array.com_level_values_open1);
             } else if (comLevelOpenStage == 2) {
-                ListPreference lp = (ListPreference) findPreference(PREF_KEY);
-                lp.setEntries(R.array.com_level_entries_open2);
-                lp.setEntryValues(R.array.com_level_values_open2);
+                comLevelPreference.setEntries(R.array.com_level_entries_open2);
+                comLevelPreference.setEntryValues(R.array.com_level_values_open2);
             }
         }
     }

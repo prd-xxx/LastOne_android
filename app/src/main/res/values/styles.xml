@@ -6,6 +6,16 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+
+        <item name="preferenceTheme">@style/AppTheme.PreferenceStyle</item>
+    </style>
+
+    <style name="AppTheme.PreferenceStyle" parent="@style/PreferenceThemeOverlay.v14.Material">
+        <item name="preferenceCategoryStyle">@style/AppTheme.CustomPreferenceCategory</item>
+    </style>
+
+    <style name="AppTheme.CustomPreferenceCategory" parent="@style/Preference.Category">
+        <item name="android:layout">@layout/custom_preference_category</item>
     </style>
 
 </resources>
